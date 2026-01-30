@@ -1,7 +1,7 @@
-import Script from 'next/script'
-import React from 'react'
+import Script from 'next/script';
+import type React from 'react';
 
-import { defaultTheme, themeLocalStorageKey } from '../ThemeSelector/types'
+import { defaultTheme, themeLocalStorageKey } from '../ThemeSelector/types';
 
 export const InitTheme: React.FC = () => {
   return (
@@ -11,19 +11,19 @@ export const InitTheme: React.FC = () => {
         __html: `
   (function () {
     function getImplicitPreference() {
-      var mediaQuery = '(prefers-color-scheme: dark)'
+      var mediaQuery = '(prefers-color-scheme: light)'
       var mql = window.matchMedia(mediaQuery)
       var hasImplicitPreference = typeof mql.matches === 'boolean'
 
       if (hasImplicitPreference) {
-        return mql.matches ? 'dark' : 'light'
+        return mql.matches ? 'light' : 'light'
       }
 
       return null
     }
 
     function themeIsValid(theme) {
-      return theme === 'light' || theme === 'dark'
+      return theme === 'light' || theme === 'light'
     }
 
     var themeToSet = '${defaultTheme}'
@@ -39,12 +39,12 @@ export const InitTheme: React.FC = () => {
       }
     }
 
-    document.documentElement.setAttribute('data-theme', themeToSet)
+    document.documentElement.setAttribute('data-theme', 'light')
   })();
-  `,
+  `
       }}
-      id="theme-script"
-      strategy="beforeInteractive"
+      id='theme-script'
+      strategy='beforeInteractive'
     />
-  )
-}
+  );
+};

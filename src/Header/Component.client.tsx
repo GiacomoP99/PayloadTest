@@ -1,42 +1,43 @@
-'use client'
-import { useHeaderTheme } from '@/providers/HeaderTheme'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
-
-import type { Header } from '@/payload-types'
-
-import { Logo } from '@/components/Logo/Logo'
-import { HeaderNav } from './Nav'
+'use client';
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import type { Header } from '@/payload-types';
+import type React from 'react';
+import type { MenuItem } from './DropdownMenu';
+import { HeaderNav } from './Nav';
+import NavigationLogo from './Nav/logo';
 
 interface HeaderClientProps {
-  data: Header
+  data: Header;
+  caseStudiesCount: number;
+  newsCount: number;
+  menus: MenuItem[];
+  lang: string;
 }
 
-export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
-  /* Storing the value in a useState to avoid hydration errors */
-  const [theme, setTheme] = useState<string | null>(null)
-  const { headerTheme, setHeaderTheme } = useHeaderTheme()
-  const pathname = usePathname()
-
-  useEffect(() => {
-    setHeaderTheme(null)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname])
-
-  useEffect(() => {
-    if (headerTheme && headerTheme !== theme) setTheme(headerTheme)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [headerTheme])
-
+export const HeaderClient: React.FC<HeaderClientProps> = ({
+  data,
+  caseStudiesCount,
+  newsCount,
+  menus,
+  lang
+}) => {
   return (
-    <header className="container relative z-20   " {...(theme ? { 'data-theme': theme } : {})}>
-      <div className="py-8 flex justify-between">
-        <Link href="/">
-          <Logo loading="eager" priority="high" className="invert dark:invert-0" />
-        </Link>
-        <HeaderNav data={data} />
-      </div>
+    <header className='z-20 h-fit'>
+      <SidebarProvider defaultOpen={false} className='h-fit min-h-0'>
+        <div className='flex h-fit w-full flex-col'>
+          <HeaderNav
+            data={data}
+            caseStudiesCount={caseStudiesCount}
+            newsCount={newsCount}
+            menus={menus}
+            lang={lang}
+          />
+          <div className='flex h-12 w-full items-center justify-between px-8 sm:hidden'>
+            <NavigationLogo logo={data?.logo} />
+            <SidebarTrigger />
+          </div>
+        </div>
+      </SidebarProvider>
     </header>
-  )
-}
+  );
+};

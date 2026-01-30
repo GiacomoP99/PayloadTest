@@ -1,13 +1,12 @@
-import type { Block, Field } from 'payload'
-
 import {
   FixedToolbarFeature,
   HeadingFeature,
   InlineToolbarFeature,
-  lexicalEditor,
-} from '@payloadcms/richtext-lexical'
+  lexicalEditor
+} from '@payloadcms/richtext-lexical';
+import type { Block, Field } from 'payload';
 
-import { link } from '@/fields/link'
+import { link } from '@/fields/link';
 
 const columnFields: Field[] = [
   {
@@ -17,51 +16,52 @@ const columnFields: Field[] = [
     options: [
       {
         label: 'One Third',
-        value: 'oneThird',
+        value: 'oneThird'
       },
       {
         label: 'Half',
-        value: 'half',
+        value: 'half'
       },
       {
         label: 'Two Thirds',
-        value: 'twoThirds',
+        value: 'twoThirds'
       },
       {
         label: 'Full',
-        value: 'full',
-      },
-    ],
+        value: 'full'
+      }
+    ]
   },
   {
     name: 'richText',
     type: 'richText',
+    localized: true,
     editor: lexicalEditor({
       features: ({ rootFeatures }) => {
         return [
           ...rootFeatures,
           HeadingFeature({ enabledHeadingSizes: ['h2', 'h3', 'h4'] }),
           FixedToolbarFeature(),
-          InlineToolbarFeature(),
-        ]
-      },
+          InlineToolbarFeature()
+        ];
+      }
     }),
-    label: false,
+    label: false
   },
   {
     name: 'enableLink',
-    type: 'checkbox',
+    type: 'checkbox'
   },
   link({
     overrides: {
       admin: {
         condition: (_data, siblingData) => {
-          return Boolean(siblingData?.enableLink)
-        },
-      },
-    },
-  }),
-]
+          return Boolean(siblingData?.enableLink);
+        }
+      }
+    }
+  })
+];
 
 export const Content: Block = {
   slug: 'content',
@@ -71,9 +71,9 @@ export const Content: Block = {
       name: 'columns',
       type: 'array',
       admin: {
-        initCollapsed: true,
+        initCollapsed: true
       },
-      fields: columnFields,
-    },
-  ],
-}
+      fields: columnFields
+    }
+  ]
+};
