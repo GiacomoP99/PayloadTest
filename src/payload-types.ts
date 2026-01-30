@@ -200,7 +200,7 @@ export interface Page {
       | null;
     media?: (string | null) | Media;
   };
-  layout: (FormBlock | ContentBlock)[];
+  layout: (FormBlock | ContentBlock | DefBlock | FullCardBlock | CarouselSectionBlock)[];
   meta?: {
     title?: string | null;
     /**
@@ -690,6 +690,275 @@ export interface ContentBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "DefBlock".
+ */
+export interface DefBlock {
+  baseBlockFields?: {
+    title?: string | null;
+    description?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+    themeColor?:
+      | (
+          | 'background'
+          | 'accent'
+          | 'card'
+          | 'gradient-section-background'
+          | 'gradient-background'
+          | 'section-1'
+          | 'section-2'
+          | 'section-3'
+        )
+      | null;
+    hasLink?: boolean | null;
+    link?: {
+      type?: ('reference' | 'custom') | null;
+      newTab?: boolean | null;
+      reference?:
+        | ({
+            relationTo: 'pages';
+            value: string | Page;
+          } | null)
+        | ({
+            relationTo: 'posts';
+            value: string | Post;
+          } | null);
+      url?: string | null;
+      label: string;
+      /**
+       * Choose how the link should be rendered.
+       */
+      appearance?: ('default' | 'outline') | null;
+    };
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'defBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FullCardBlock".
+ */
+export interface FullCardBlock {
+  type?: ('single' | 'list') | null;
+  single?: {
+    media?: (string | null) | Media;
+    title?: {
+      type?: ('text' | 'logo') | null;
+      title?: string | null;
+      logo?: (string | null) | Media;
+    };
+    description?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+    hasLink?: boolean | null;
+    link?: {
+      type?: ('reference' | 'custom') | null;
+      newTab?: boolean | null;
+      reference?:
+        | ({
+            relationTo: 'pages';
+            value: string | Page;
+          } | null)
+        | ({
+            relationTo: 'posts';
+            value: string | Post;
+          } | null);
+      url?: string | null;
+    };
+  };
+  list?: {
+    direction?: ('horizontal' | 'vertical') | null;
+    cards?:
+      | {
+          media?: (string | null) | Media;
+          title?: string | null;
+          description?: {
+            root: {
+              type: string;
+              children: {
+                type: any;
+                version: number;
+                [k: string]: unknown;
+              }[];
+              direction: ('ltr' | 'rtl') | null;
+              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+              indent: number;
+              version: number;
+            };
+            [k: string]: unknown;
+          } | null;
+          hasList?: boolean | null;
+          list?:
+            | {
+                value?: string | null;
+                id?: string | null;
+              }[]
+            | null;
+          marker?: string | null;
+          hasLink?: boolean | null;
+          link?: {
+            type?: ('reference' | 'custom') | null;
+            newTab?: boolean | null;
+            reference?:
+              | ({
+                  relationTo: 'pages';
+                  value: string | Page;
+                } | null)
+              | ({
+                  relationTo: 'posts';
+                  value: string | Post;
+                } | null);
+            url?: string | null;
+          };
+          id?: string | null;
+        }[]
+      | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'fullcard';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CarouselSectionBlock".
+ */
+export interface CarouselSectionBlock {
+  baseBlockFields?: {
+    title?: string | null;
+    description?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+    themeColor?:
+      | (
+          | 'background'
+          | 'accent'
+          | 'card'
+          | 'gradient-section-background'
+          | 'gradient-background'
+          | 'section-1'
+          | 'section-2'
+          | 'section-3'
+        )
+      | null;
+    hasLink?: boolean | null;
+    link?: {
+      type?: ('reference' | 'custom') | null;
+      newTab?: boolean | null;
+      reference?:
+        | ({
+            relationTo: 'pages';
+            value: string | Page;
+          } | null)
+        | ({
+            relationTo: 'posts';
+            value: string | Post;
+          } | null);
+      url?: string | null;
+      label: string;
+      /**
+       * Choose how the link should be rendered.
+       */
+      appearance?: ('default' | 'outline') | null;
+    };
+  };
+  cardType?: ('custom' | 'casestudies' | 'patents' | 'papers' | 'researchPrograms') | null;
+  columns?: number | null;
+  customCards?: {
+    imgSize?: ('icon' | 'xs' | 'sm' | 'md' | 'lg') | null;
+    imgPosition?: ('left' | 'top' | 'top-left') | null;
+    cards?:
+      | {
+          card?: {
+            media?: (string | null) | Media;
+            title?: string | null;
+            type?: string | null;
+            description?: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            hasOnClick?: boolean | null;
+            onClick?: {
+              type?: ('reference' | 'custom') | null;
+              newTab?: boolean | null;
+              reference?:
+                | ({
+                    relationTo: 'pages';
+                    value: string | Page;
+                  } | null)
+                | ({
+                    relationTo: 'posts';
+                    value: string | Post;
+                  } | null);
+              url?: string | null;
+              label: string;
+              /**
+               * Choose how the link should be rendered.
+               */
+              appearance?: ('default' | 'outline') | null;
+            };
+          };
+          id?: string | null;
+        }[]
+      | null;
+  };
+  casestudiesCards?: (string | Page)[] | null;
+  patentsCards?: (string | Page)[] | null;
+  papersCards?: (string | Page)[] | null;
+  researchProgramsCards?: (string | Page)[] | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'caro';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "headers".
  */
 export interface Header {
@@ -1105,6 +1374,9 @@ export interface PagesSelect<T extends boolean = true> {
     | {
         formBlock?: T | FormBlockSelect<T>;
         content?: T | ContentBlockSelect<T>;
+        defBlock?: T | DefBlockSelect<T>;
+        fullcard?: T | FullCardBlockSelect<T>;
+        caro?: T | CarouselSectionBlockSelect<T>;
       };
   meta?:
     | T
@@ -1155,6 +1427,155 @@ export interface ContentBlockSelect<T extends boolean = true> {
             };
         id?: T;
       };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "DefBlock_select".
+ */
+export interface DefBlockSelect<T extends boolean = true> {
+  baseBlockFields?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        themeColor?: T;
+        hasLink?: T;
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+              appearance?: T;
+            };
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FullCardBlock_select".
+ */
+export interface FullCardBlockSelect<T extends boolean = true> {
+  type?: T;
+  single?:
+    | T
+    | {
+        media?: T;
+        title?:
+          | T
+          | {
+              type?: T;
+              title?: T;
+              logo?: T;
+            };
+        description?: T;
+        hasLink?: T;
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+            };
+      };
+  list?:
+    | T
+    | {
+        direction?: T;
+        cards?:
+          | T
+          | {
+              media?: T;
+              title?: T;
+              description?: T;
+              hasList?: T;
+              list?:
+                | T
+                | {
+                    value?: T;
+                    id?: T;
+                  };
+              marker?: T;
+              hasLink?: T;
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                  };
+              id?: T;
+            };
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CarouselSectionBlock_select".
+ */
+export interface CarouselSectionBlockSelect<T extends boolean = true> {
+  baseBlockFields?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        themeColor?: T;
+        hasLink?: T;
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+              appearance?: T;
+            };
+      };
+  cardType?: T;
+  columns?: T;
+  customCards?:
+    | T
+    | {
+        imgSize?: T;
+        imgPosition?: T;
+        cards?:
+          | T
+          | {
+              card?:
+                | T
+                | {
+                    media?: T;
+                    title?: T;
+                    type?: T;
+                    description?: T;
+                    hasOnClick?: T;
+                    onClick?:
+                      | T
+                      | {
+                          type?: T;
+                          newTab?: T;
+                          reference?: T;
+                          url?: T;
+                          label?: T;
+                          appearance?: T;
+                        };
+                  };
+              id?: T;
+            };
+      };
+  casestudiesCards?: T;
+  patentsCards?: T;
+  papersCards?: T;
+  researchProgramsCards?: T;
   id?: T;
   blockName?: T;
 }
@@ -1745,52 +2166,6 @@ export interface TaskSchedulePublish {
     user?: (string | null) | User;
   };
   output?: unknown;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "BannerBlock".
- */
-export interface BannerBlock {
-  style: 'info' | 'warning' | 'error' | 'success';
-  content: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'banner';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CodeBlock".
- */
-export interface CodeBlock {
-  language?: ('typescript' | 'javascript' | 'css') | null;
-  code: string;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'code';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "MediaBlock".
- */
-export interface MediaBlock {
-  media: string | Media;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'mediaBlock';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

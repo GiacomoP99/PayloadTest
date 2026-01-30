@@ -1,0 +1,25 @@
+.slug-color-component {
+  flex: 1 1 auto;
+
+  .label-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .field-wrapper {
+    display: flex;
+  }
+
+  .color-preview {
+    margin-right: 0.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid rgb(60, 60, 60);
+    width: 40px;
+    height: 40px;
+  }
+
+  .field-type.text {
+    width: 90%;
+  }
+}

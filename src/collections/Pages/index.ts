@@ -1,4 +1,7 @@
+import { CarouselSection } from '@/blocks/CarouselSection/config';
 import { Content } from '@/blocks/Content/config';
+import { FullCard } from '@/blocks/FullCardBlock/config';
+import { NoContentBlock } from '@/blocks/NoContentBlock/config';
 import { tenantField } from '@/fields/tenantField';
 import { hero } from '@/heros/config';
 import {
@@ -88,11 +91,10 @@ export const Pages: CollectionConfig<'pages'> = {
               type: 'blocks',
               blocks: [
                 FormBlock,
-                Content
-                // CardSection,
-                // FullCard,
-                // CarouselSection,
-                // NoContentBlock,
+                Content,
+                NoContentBlock,
+                FullCard,
+                CarouselSection
                 // TabsBlock,
                 // GovernanceBlock,
                 // PatentSection,

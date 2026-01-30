@@ -8,6 +8,26 @@ import {
 } from '@payloadcms/richtext-lexical';
 import type { Field } from 'payload';
 
+const EMPTY_CONTENT = {
+  root: {
+    children: [
+      {
+        children: [],
+        direction: null,
+        format: '',
+        indent: 0,
+        type: 'paragraph',
+        version: 1
+      }
+    ],
+    direction: null,
+    format: '',
+    indent: 0,
+    type: 'root',
+    version: 1
+  }
+};
+
 export const richtextField = (
   name?: string,
   label?: { it: string; en: string }
@@ -16,6 +36,7 @@ export const richtextField = (
   localized: true,
   type: 'richText',
   label,
+  defaultValue: EMPTY_CONTENT,
   editor: lexicalEditor({
     features: ({ rootFeatures }) => {
       return [
