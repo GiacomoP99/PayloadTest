@@ -13,9 +13,10 @@ import { Media } from './collections/Media';
 import { Pages } from './collections/Pages';
 import { Patented } from './collections/Patented';
 import { Posts } from './collections/Posts';
+import { Themes } from './collections/Themes';
 import { Users } from './collections/Users';
 import { WorldMap } from './collections/WorldMap';
-import { Footer } from './Footer/config';
+import { Footers } from './Footer/config';
 import { Headers } from './Header/config';
 import { plugins } from './plugins';
 import { getServerSideURL } from './utilities/getURL';
@@ -75,10 +76,12 @@ export default buildConfig({
     Governance,
     WorldMap,
     Patented,
-    Logos
+    Logos,
+    Themes,
+    Footers
   ],
   cors: [getServerSideURL()].filter(Boolean),
-  globals: [Footer],
+  globals: [],
   plugins,
   secret: process.env.PAYLOAD_SECRET,
   sharp,

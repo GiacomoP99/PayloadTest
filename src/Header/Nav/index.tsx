@@ -27,13 +27,13 @@ export const HeaderNav: React.FC<{
   return !isMobile ? (
     <nav className='flex h-32 flex-col shadow-lg'>
       <div className='bg-[#D9D9D9] text-primary'>
-        <div className='container mx-auto flex h-9 items-center justify-between px-4'>
+        <div className='container mx-auto flex h-9 items-center justify-between px-4 overflow-x-hidden'>
           <div className='language-select flex h-9 items-center space-x-2'>
             <AizoonLinks links={data?.aizoonLinks || []} />
             <WebsiteLinks links={data?.websiteLinks || []} />
           </div>
 
-          <div className='language-select flex h-9 items-center space-x-2'>
+          <div className='language-select flex h-9 items-center space-x-2 inset-0'>
             {newsCount ? (
               newsCount > 0 ? (
                 <Link

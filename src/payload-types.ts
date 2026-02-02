@@ -77,6 +77,8 @@ export interface Config {
     worldmap: Worldmap;
     patented: Patented;
     logos: Logo;
+    themes: Theme;
+    footers: Footer;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -104,6 +106,8 @@ export interface Config {
     worldmap: WorldmapSelect<false> | WorldmapSelect<true>;
     patented: PatentedSelect<false> | PatentedSelect<true>;
     logos: LogosSelect<false> | LogosSelect<true>;
+    themes: ThemesSelect<false> | ThemesSelect<true>;
+    footers: FootersSelect<false> | FootersSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -119,12 +123,8 @@ export interface Config {
     defaultIDType: string;
   };
   fallbackLocale: ('false' | 'none' | 'null') | false | null | ('en' | 'it') | ('en' | 'it')[];
-  globals: {
-    footer: Footer;
-  };
-  globalsSelect: {
-    footer: FooterSelect<false> | FooterSelect<true>;
-  };
+  globals: {};
+  globalsSelect: {};
   locale: 'en' | 'it';
   user: User & {
     collection: 'users';
@@ -166,7 +166,9 @@ export interface Page {
   id: string;
   title: string;
   hero: {
-    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact';
+    type: 'none' | 'mediumImpact' | 'highImpact';
+    position?: ('left' | 'center' | 'right') | null;
+    title?: string | null;
     richText?: {
       root: {
         type: string;
@@ -206,7 +208,22 @@ export interface Page {
           id?: string | null;
         }[]
       | null;
-    media?: (string | null) | Media;
+    background?: {
+      'background-type': 'color' | 'image';
+      themeColor?:
+        | (
+            | 'background'
+            | 'accent'
+            | 'card'
+            | 'gradient-section-background'
+            | 'gradient-background'
+            | 'section-1'
+            | 'section-2'
+            | 'section-3'
+          )
+        | null;
+      media?: (string | null) | Media;
+    };
   };
   layout: (
     | FormBlock
@@ -1736,6 +1753,119 @@ export interface Header {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "themes".
+ */
+export interface Theme {
+  id: string;
+  title: string;
+  tenant: 'it' | 'usa' | 'es' | 'au';
+  '--theme-background': string;
+  '--theme-foreground': string;
+  '--theme-primary': string;
+  '--theme-primary-foreground': string;
+  '--theme-accent': string;
+  '--theme-accent-foreground': string;
+  '--theme-secondary': string;
+  '--theme-card': string;
+  '--theme-gradient-section-background': string;
+  '--theme-background-section-1': string;
+  '--theme-background-section-2': string;
+  '--theme-background-section-3': string;
+  '--theme-background-gradient': string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footers".
+ */
+export interface Footer {
+  id: string;
+  tenant: 'it' | 'usa' | 'es' | 'au';
+  title: string;
+  logo: string | Media;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  socials?:
+    | {
+        link?: string | null;
+        icon?: ('facebook' | 'instagram' | 'linkedin' | 'twitter' | 'youtube') | null;
+        id?: string | null;
+      }[]
+    | null;
+  footerItems?:
+    | {
+        column: {
+          label: string;
+          links?:
+            | {
+                link: {
+                  type?: ('reference' | 'custom') | null;
+                  newTab?: boolean | null;
+                  reference?:
+                    | ({
+                        relationTo: 'pages';
+                        value: string | Page;
+                      } | null)
+                    | ({
+                        relationTo: 'posts';
+                        value: string | Post;
+                      } | null);
+                  url?: string | null;
+                  label: string;
+                };
+                id?: string | null;
+              }[]
+            | null;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  bottomLeft?:
+    | {
+        label: string;
+        id?: string | null;
+      }[]
+    | null;
+  bottomRight?:
+    | {
+        link: {
+          type?: ('reference' | 'custom') | null;
+          newTab?: boolean | null;
+          reference?:
+            | ({
+                relationTo: 'pages';
+                value: string | Page;
+              } | null)
+            | ({
+                relationTo: 'posts';
+                value: string | Post;
+              } | null);
+          url?: string | null;
+          label: string;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  blocks?: (FormBlock | ComposableBlock)[] | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -1965,6 +2095,14 @@ export interface PayloadLockedDocument {
         value: string | Logo;
       } | null)
     | ({
+        relationTo: 'themes';
+        value: string | Theme;
+      } | null)
+    | ({
+        relationTo: 'footers';
+        value: string | Footer;
+      } | null)
+    | ({
         relationTo: 'redirects';
         value: string | Redirect;
       } | null)
@@ -2036,6 +2174,8 @@ export interface PagesSelect<T extends boolean = true> {
     | T
     | {
         type?: T;
+        position?: T;
+        title?: T;
         richText?: T;
         links?:
           | T
@@ -2052,7 +2192,13 @@ export interface PagesSelect<T extends boolean = true> {
                   };
               id?: T;
             };
-        media?: T;
+        background?:
+          | T
+          | {
+              'background-type'?: T;
+              themeColor?: T;
+              media?: T;
+            };
       };
   layout?:
     | T
@@ -2882,6 +3028,98 @@ export interface LogosSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "themes_select".
+ */
+export interface ThemesSelect<T extends boolean = true> {
+  title?: T;
+  tenant?: T;
+  '--theme-background'?: T;
+  '--theme-foreground'?: T;
+  '--theme-primary'?: T;
+  '--theme-primary-foreground'?: T;
+  '--theme-accent'?: T;
+  '--theme-accent-foreground'?: T;
+  '--theme-secondary'?: T;
+  '--theme-card'?: T;
+  '--theme-gradient-section-background'?: T;
+  '--theme-background-section-1'?: T;
+  '--theme-background-section-2'?: T;
+  '--theme-background-section-3'?: T;
+  '--theme-background-gradient'?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footers_select".
+ */
+export interface FootersSelect<T extends boolean = true> {
+  tenant?: T;
+  title?: T;
+  logo?: T;
+  description?: T;
+  socials?:
+    | T
+    | {
+        link?: T;
+        icon?: T;
+        id?: T;
+      };
+  footerItems?:
+    | T
+    | {
+        column?:
+          | T
+          | {
+              label?: T;
+              links?:
+                | T
+                | {
+                    link?:
+                      | T
+                      | {
+                          type?: T;
+                          newTab?: T;
+                          reference?: T;
+                          url?: T;
+                          label?: T;
+                        };
+                    id?: T;
+                  };
+            };
+        id?: T;
+      };
+  bottomLeft?:
+    | T
+    | {
+        label?: T;
+        id?: T;
+      };
+  bottomRight?:
+    | T
+    | {
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+            };
+        id?: T;
+      };
+  blocks?:
+    | T
+    | {
+        formBlock?: T | FormBlockSelect<T>;
+        comp?: T | ComposableBlockSelect<T>;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects_select".
  */
 export interface RedirectsSelect<T extends boolean = true> {
@@ -3154,58 +3392,6 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "footer".
- */
-export interface Footer {
-  id: string;
-  navItems?:
-    | {
-        link: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: string | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: string | Post;
-              } | null);
-          url?: string | null;
-          label: string;
-        };
-        id?: string | null;
-      }[]
-    | null;
-  updatedAt?: string | null;
-  createdAt?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "footer_select".
- */
-export interface FooterSelect<T extends boolean = true> {
-  navItems?:
-    | T
-    | {
-        link?:
-          | T
-          | {
-              type?: T;
-              newTab?: T;
-              reference?: T;
-              url?: T;
-              label?: T;
-            };
-        id?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

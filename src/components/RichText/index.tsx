@@ -9,6 +9,7 @@ import {
   type JSXConvertersFunction,
   LinkJSXConverter
 } from '@payloadcms/richtext-lexical/react';
+import { textConverter } from './textConverter';
 
 type NodeTypes = DefaultNodeTypes;
 
@@ -25,6 +26,7 @@ const jsxConverters: JSXConvertersFunction<NodeTypes> = ({
   defaultConverters
 }) => ({
   ...defaultConverters,
+  ...textConverter,
   ...LinkJSXConverter({ internalDocToHref }),
   blocks: {}
 });
@@ -41,11 +43,11 @@ export default function RichText(props: Props) {
     <ConvertRichText
       converters={jsxConverters}
       className={cn(
-        'payload-richtext',
+        '',
         {
           container: enableGutter,
           'max-w-none': !enableGutter,
-          'prose md:prose-md dark:prose-invert mx-auto': enableProse
+          'md:prose-md dark:prose-invert mx-auto': enableProse
         },
         className
       )}

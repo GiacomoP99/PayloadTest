@@ -26,7 +26,7 @@ export async function generateStaticParams() {
 
   const params = pages.docs
     ?.filter(doc => {
-      return doc.slug !== 'home';
+      return doc.slug !== 'home-page';
     })
     .map(({ slug }) => {
       return { slug };
@@ -69,14 +69,15 @@ export default async function Page({ params: paramsPromise }: Args) {
   const { hero, layout } = page;
 
   return (
-    <article className='pt-16 pb-24'>
+    <article className=''>
       <PageClient />
       {/* Allows redirects for valid pages too */}
       <PayloadRedirects disableNotFound url={url} />
 
       {draft && <LivePreviewListener />}
-
-      <RenderHero {...hero} />
+      <div className='container mx-auto'>
+        <RenderHero {...hero}  />
+      </div>
       <RenderBlocks blocks={layout} />
     </article>
   );
@@ -85,7 +86,7 @@ export default async function Page({ params: paramsPromise }: Args) {
 export async function generateMetadata({
   params: paramsPromise
 }: Args): Promise<Metadata> {
-  const { tenant, lang = 'en', slug = 'home' } = await paramsPromise;
+  const { tenant, lang = 'en', slug = 'home-page' } = await paramsPromise;
   // Decode to support slugs with special characters
   const decodedSlug = decodeURIComponent(slug);
   const page = await queryPageBySlug({

@@ -1,13 +1,14 @@
-import type { TextFieldSingleValidation } from 'payload'
+import { FontColor } from '@/lexical-features/font-color/feature.server'
 import {
   BoldFeature,
   ItalicFeature,
+  lexicalEditor,
   LinkFeature,
   ParagraphFeature,
-  lexicalEditor,
   UnderlineFeature,
   type LinkFields,
 } from '@payloadcms/richtext-lexical'
+import type { TextFieldSingleValidation } from 'payload'
 
 export const defaultLexical = lexicalEditor({
   features: [
@@ -43,5 +44,6 @@ export const defaultLexical = lexicalEditor({
         ]
       },
     }),
+    FontColor()
   ],
 })

@@ -15,7 +15,8 @@
       "!**/yarn.lock",
       "!**/vite.config.ts",
       "!**/tailwind.config.cjs"
-    ]
+    ],
+    "ignore": ["**/*.css"]
   },
   "formatter": {
     "enabled": true,

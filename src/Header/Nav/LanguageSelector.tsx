@@ -4,17 +4,17 @@ import {
   Select,
   SelectContent,
   SelectItem,
-  SelectTrigger
+  SelectTrigger,
+  SelectValue
 } from '@/components/ui/select';
-import { Languages } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import type React from 'react';
 
 // Define available languages
 // You can move this to a config file or fetch from Payload CMS if needed
 const LANGUAGES = [
-  { code: 'it', label: 'Italiano', flag: '🇮🇹' },
-  { code: 'en', label: 'English', flag: '🇬🇧' }
+  { code: 'it', label: 'It', flag: '🇮🇹' },
+  { code: 'en', label: 'En', flag: '🇬🇧' }
 ] as const;
 
 export const LanguageSelector: React.FC<{ lang: string }> = ({ lang }) => {
@@ -51,17 +51,16 @@ export const LanguageSelector: React.FC<{ lang: string }> = ({ lang }) => {
 
   return (
     <Select value={currentLanguage} onValueChange={handleLanguageChange}>
-      <SelectTrigger className='h-8 w-fit gap-2 border border-primary text-foreground'>
-        <Languages className='h-4 w-4' />
+      {/* Trigger */}
+      <SelectTrigger className='h-6 w-fit border border-primary text-foreground'>
+        <SelectValue placeholder='Select a language' />
       </SelectTrigger>
 
+      {/* Content */}
       <SelectContent>
-        {LANGUAGES.map(langOption => (
-          <SelectItem key={langOption.code} value={langOption.code}>
-            <span className='flex items-center gap-2'>
-              <span>{langOption.flag}</span>
-              <span>{langOption.label}</span>
-            </span>
+        {LANGUAGES.map(lang => (
+          <SelectItem key={lang.code} value={lang.code}>
+            {lang.label}
           </SelectItem>
         ))}
       </SelectContent>
