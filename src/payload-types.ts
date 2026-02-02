@@ -73,6 +73,10 @@ export interface Config {
     categories: Category;
     users: User;
     headers: Header;
+    governance: Governance;
+    worldmap: Worldmap;
+    patented: Patented;
+    logos: Logo;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -96,6 +100,10 @@ export interface Config {
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     headers: HeadersSelect<false> | HeadersSelect<true>;
+    governance: GovernanceSelect<false> | GovernanceSelect<true>;
+    worldmap: WorldmapSelect<false> | WorldmapSelect<true>;
+    patented: PatentedSelect<false> | PatentedSelect<true>;
+    logos: LogosSelect<false> | LogosSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -200,7 +208,19 @@ export interface Page {
       | null;
     media?: (string | null) | Media;
   };
-  layout: (FormBlock | ContentBlock | DefBlock | FullCardBlock | CarouselSectionBlock)[];
+  layout: (
+    | FormBlock
+    | ContentBlock
+    | DefBlock
+    | FullCardBlock
+    | CarouselSectionBlock
+    | TabsBlock
+    | GovernanceBlock
+    | PatentSectionBlock
+    | ComposableBlock
+    | LogoSectionBlock
+    | WorldMapSectionBlock
+  )[];
   meta?: {
     title?: string | null;
     /**
@@ -443,9 +463,8 @@ export interface User {
  * via the `definition` "FormBlock".
  */
 export interface FormBlock {
-  form: string | Form;
-  enableIntro?: boolean | null;
-  introContent?: {
+  title?: string | null;
+  description?: {
     root: {
       type: string;
       children: {
@@ -460,6 +479,7 @@ export interface FormBlock {
     };
     [k: string]: unknown;
   } | null;
+  form: string | Form;
   id?: string | null;
   blockName?: string | null;
   blockType: 'formBlock';
@@ -959,6 +979,655 @@ export interface CarouselSectionBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TabsBlock".
+ */
+export interface TabsBlock {
+  baseBlockFields?: {
+    title?: string | null;
+    description?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+    themeColor?:
+      | (
+          | 'background'
+          | 'accent'
+          | 'card'
+          | 'gradient-section-background'
+          | 'gradient-background'
+          | 'section-1'
+          | 'section-2'
+          | 'section-3'
+        )
+      | null;
+    hasLink?: boolean | null;
+    link?: {
+      type?: ('reference' | 'custom') | null;
+      newTab?: boolean | null;
+      reference?:
+        | ({
+            relationTo: 'pages';
+            value: string | Page;
+          } | null)
+        | ({
+            relationTo: 'posts';
+            value: string | Post;
+          } | null);
+      url?: string | null;
+      label: string;
+      /**
+       * Choose how the link should be rendered.
+       */
+      appearance?: ('default' | 'outline') | null;
+    };
+  };
+  hasSubTabs?: boolean | null;
+  tabs?:
+    | {
+        tab: {
+          label: string;
+          content?: ComposableBlock[] | null;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  ExternalTabs?:
+    | {
+        label: string;
+        subTab?:
+          | {
+              subTabLabel: string;
+              content?: ComposableBlock[] | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'tb';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ComposableBlock".
+ */
+export interface ComposableBlock {
+  themeColor?:
+    | (
+        | 'background'
+        | 'accent'
+        | 'card'
+        | 'gradient-section-background'
+        | 'gradient-background'
+        | 'section-1'
+        | 'section-2'
+        | 'section-3'
+      )
+    | null;
+  columns?: number | null;
+  backgroundImages?:
+    | {
+        imagePosition?: ('top-left' | 'top-right' | 'bottom-left' | 'bottom-right') | null;
+        image?: (string | null) | Media;
+        id?: string | null;
+      }[]
+    | null;
+  content?:
+    | {
+        columnsSpan?: number | null;
+        block?:
+          | (
+              | DefBlock
+              | RichTextBlock
+              | Image
+              | Tags
+              | TitleBlock
+              | CallToActionBlock
+              | FormBlock
+              | EmptyBlock
+              | GridBlock
+            )[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'comp';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Rich Text Block".
+ */
+export interface RichTextBlock {
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'rb';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Image".
+ */
+export interface Image {
+  image: string | Media;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'fib';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Tags".
+ */
+export interface Tags {
+  themeColor?:
+    | (
+        | 'background'
+        | 'accent'
+        | 'card'
+        | 'gradient-section-background'
+        | 'gradient-background'
+        | 'section-1'
+        | 'section-2'
+        | 'section-3'
+      )
+    | null;
+  align: 'left' | 'center' | 'right';
+  orientation: 'horizontal' | 'vertical';
+  style: 'default' | 'outline-solid';
+  size: 'sm' | 'md' | 'lg';
+  tags?:
+    | {
+        label: string;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'tagsBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Title Block".
+ */
+export interface TitleBlock {
+  title: string;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'titleBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Call To Action Block".
+ */
+export interface CallToActionBlock {
+  link: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?:
+      | ({
+          relationTo: 'pages';
+          value: string | Page;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: string | Post;
+        } | null);
+    url?: string | null;
+    label: string;
+    /**
+     * Choose how the link should be rendered.
+     */
+    appearance?: ('default' | 'outline') | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'callToActionBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "EmptyBlock".
+ */
+export interface EmptyBlock {
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'emptyBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "GridBlock".
+ */
+export interface GridBlock {
+  items?:
+    | {
+        backgroundType?: ('color' | 'image') | null;
+        backgroundColor?: string | null;
+        backgroundImage?: (string | null) | Media;
+        description?: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        } | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'gridBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "GovernanceBlock".
+ */
+export interface GovernanceBlock {
+  baseBlockFields?: {
+    title?: string | null;
+    description?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+    themeColor?:
+      | (
+          | 'background'
+          | 'accent'
+          | 'card'
+          | 'gradient-section-background'
+          | 'gradient-background'
+          | 'section-1'
+          | 'section-2'
+          | 'section-3'
+        )
+      | null;
+    hasLink?: boolean | null;
+    link?: {
+      type?: ('reference' | 'custom') | null;
+      newTab?: boolean | null;
+      reference?:
+        | ({
+            relationTo: 'pages';
+            value: string | Page;
+          } | null)
+        | ({
+            relationTo: 'posts';
+            value: string | Post;
+          } | null);
+      url?: string | null;
+      label: string;
+      /**
+       * Choose how the link should be rendered.
+       */
+      appearance?: ('default' | 'outline') | null;
+    };
+  };
+  governance: string | Governance;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'gb';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "governance".
+ */
+export interface Governance {
+  id: string;
+  name?: string | null;
+  externalTabs: {
+    label: string;
+    subTab?:
+      | {
+          subTabLabel: string;
+          column1?: {
+            root: {
+              type: string;
+              children: {
+                type: any;
+                version: number;
+                [k: string]: unknown;
+              }[];
+              direction: ('ltr' | 'rtl') | null;
+              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+              indent: number;
+              version: number;
+            };
+            [k: string]: unknown;
+          } | null;
+          column2?: {
+            root: {
+              type: string;
+              children: {
+                type: any;
+                version: number;
+                [k: string]: unknown;
+              }[];
+              direction: ('ltr' | 'rtl') | null;
+              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+              indent: number;
+              version: number;
+            };
+            [k: string]: unknown;
+          } | null;
+          id?: string | null;
+        }[]
+      | null;
+    id?: string | null;
+  }[];
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PatentSectionBlock".
+ */
+export interface PatentSectionBlock {
+  baseBlockFields?: {
+    title?: string | null;
+    description?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+    themeColor?:
+      | (
+          | 'background'
+          | 'accent'
+          | 'card'
+          | 'gradient-section-background'
+          | 'gradient-background'
+          | 'section-1'
+          | 'section-2'
+          | 'section-3'
+        )
+      | null;
+    hasLink?: boolean | null;
+    link?: {
+      type?: ('reference' | 'custom') | null;
+      newTab?: boolean | null;
+      reference?:
+        | ({
+            relationTo: 'pages';
+            value: string | Page;
+          } | null)
+        | ({
+            relationTo: 'posts';
+            value: string | Post;
+          } | null);
+      url?: string | null;
+      label: string;
+      /**
+       * Choose how the link should be rendered.
+       */
+      appearance?: ('default' | 'outline') | null;
+    };
+  };
+  patents: (string | Patented)[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'ps';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "patented".
+ */
+export interface Patented {
+  id: string;
+  title?: string | null;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  flags: ('US' | 'IT' | 'JP' | 'CN' | 'AU' | 'CA' | 'FR' | 'DE' | 'IN' | 'KR' | 'GB' | 'ES' | 'UE')[];
+  file?: (string | null) | Media;
+  granted?: string | null;
+  techonlogies?: ('INIDS' | 'MDL' | 'AD')[] | null;
+  appDomain?: 'CS' | null;
+  applicationYear?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LogoSectionBlock".
+ */
+export interface LogoSectionBlock {
+  baseBlockFields?: {
+    title?: string | null;
+    description?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+    themeColor?:
+      | (
+          | 'background'
+          | 'accent'
+          | 'card'
+          | 'gradient-section-background'
+          | 'gradient-background'
+          | 'section-1'
+          | 'section-2'
+          | 'section-3'
+        )
+      | null;
+    hasLink?: boolean | null;
+    link?: {
+      type?: ('reference' | 'custom') | null;
+      newTab?: boolean | null;
+      reference?:
+        | ({
+            relationTo: 'pages';
+            value: string | Page;
+          } | null)
+        | ({
+            relationTo: 'posts';
+            value: string | Post;
+          } | null);
+      url?: string | null;
+      label: string;
+      /**
+       * Choose how the link should be rendered.
+       */
+      appearance?: ('default' | 'outline') | null;
+    };
+  };
+  logos: string | Logo;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'lsb';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "logos".
+ */
+export interface Logo {
+  id: string;
+  name: string;
+  columns: '2' | '3' | '4' | '5' | '6';
+  rows: '1' | '2' | '3';
+  logos?:
+    | {
+        logo: string | Media;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "WorldMapSectionBlock".
+ */
+export interface WorldMapSectionBlock {
+  baseBlockFields?: {
+    title?: string | null;
+    description?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+    themeColor?:
+      | (
+          | 'background'
+          | 'accent'
+          | 'card'
+          | 'gradient-section-background'
+          | 'gradient-background'
+          | 'section-1'
+          | 'section-2'
+          | 'section-3'
+        )
+      | null;
+    hasLink?: boolean | null;
+    link?: {
+      type?: ('reference' | 'custom') | null;
+      newTab?: boolean | null;
+      reference?:
+        | ({
+            relationTo: 'pages';
+            value: string | Page;
+          } | null)
+        | ({
+            relationTo: 'posts';
+            value: string | Post;
+          } | null);
+      url?: string | null;
+      label: string;
+      /**
+       * Choose how the link should be rendered.
+       */
+      appearance?: ('default' | 'outline') | null;
+    };
+  };
+  worldMap: string | Worldmap;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'wms';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "worldmap".
+ */
+export interface Worldmap {
+  id: string;
+  name?: string | null;
+  coordinates: {
+    country?: string | null;
+    latitude: string;
+    longitude: string;
+    id?: string | null;
+  }[];
+  columns?:
+    | {
+        description?: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        } | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "headers".
  */
 export interface Header {
@@ -1280,6 +1949,22 @@ export interface PayloadLockedDocument {
         value: string | Header;
       } | null)
     | ({
+        relationTo: 'governance';
+        value: string | Governance;
+      } | null)
+    | ({
+        relationTo: 'worldmap';
+        value: string | Worldmap;
+      } | null)
+    | ({
+        relationTo: 'patented';
+        value: string | Patented;
+      } | null)
+    | ({
+        relationTo: 'logos';
+        value: string | Logo;
+      } | null)
+    | ({
         relationTo: 'redirects';
         value: string | Redirect;
       } | null)
@@ -1377,6 +2062,12 @@ export interface PagesSelect<T extends boolean = true> {
         defBlock?: T | DefBlockSelect<T>;
         fullcard?: T | FullCardBlockSelect<T>;
         caro?: T | CarouselSectionBlockSelect<T>;
+        tb?: T | TabsBlockSelect<T>;
+        gb?: T | GovernanceBlockSelect<T>;
+        ps?: T | PatentSectionBlockSelect<T>;
+        comp?: T | ComposableBlockSelect<T>;
+        lsb?: T | LogoSectionBlockSelect<T>;
+        wms?: T | WorldMapSectionBlockSelect<T>;
       };
   meta?:
     | T
@@ -1398,9 +2089,9 @@ export interface PagesSelect<T extends boolean = true> {
  * via the `definition` "FormBlock_select".
  */
 export interface FormBlockSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
   form?: T;
-  enableIntro?: T;
-  introContent?: T;
   id?: T;
   blockName?: T;
 }
@@ -1576,6 +2267,298 @@ export interface CarouselSectionBlockSelect<T extends boolean = true> {
   patentsCards?: T;
   papersCards?: T;
   researchProgramsCards?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TabsBlock_select".
+ */
+export interface TabsBlockSelect<T extends boolean = true> {
+  baseBlockFields?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        themeColor?: T;
+        hasLink?: T;
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+              appearance?: T;
+            };
+      };
+  hasSubTabs?: T;
+  tabs?:
+    | T
+    | {
+        tab?:
+          | T
+          | {
+              label?: T;
+              content?:
+                | T
+                | {
+                    comp?: T | ComposableBlockSelect<T>;
+                  };
+            };
+        id?: T;
+      };
+  ExternalTabs?:
+    | T
+    | {
+        label?: T;
+        subTab?:
+          | T
+          | {
+              subTabLabel?: T;
+              content?:
+                | T
+                | {
+                    comp?: T | ComposableBlockSelect<T>;
+                  };
+              id?: T;
+            };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ComposableBlock_select".
+ */
+export interface ComposableBlockSelect<T extends boolean = true> {
+  themeColor?: T;
+  columns?: T;
+  backgroundImages?:
+    | T
+    | {
+        imagePosition?: T;
+        image?: T;
+        id?: T;
+      };
+  content?:
+    | T
+    | {
+        columnsSpan?: T;
+        block?:
+          | T
+          | {
+              defBlock?: T | DefBlockSelect<T>;
+              rb?: T | RichTextBlockSelect<T>;
+              fib?: T | ImageSelect<T>;
+              tagsBlock?: T | TagsSelect<T>;
+              titleBlock?: T | TitleBlockSelect<T>;
+              callToActionBlock?: T | CallToActionBlockSelect<T>;
+              formBlock?: T | FormBlockSelect<T>;
+              emptyBlock?: T | EmptyBlockSelect<T>;
+              gridBlock?: T | GridBlockSelect<T>;
+            };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Rich Text Block_select".
+ */
+export interface RichTextBlockSelect {
+  description?: boolean;
+  id?: boolean;
+  blockName?: boolean;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Image_select".
+ */
+export interface ImageSelect<T extends boolean = true> {
+  image?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Tags_select".
+ */
+export interface TagsSelect<T extends boolean = true> {
+  themeColor?: T;
+  align?: T;
+  orientation?: T;
+  style?: T;
+  size?: T;
+  tags?:
+    | T
+    | {
+        label?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Title Block_select".
+ */
+export interface TitleBlockSelect {
+  title?: boolean;
+  id?: boolean;
+  blockName?: boolean;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Call To Action Block_select".
+ */
+export interface CallToActionBlockSelect {
+  link?:
+    | boolean
+    | {
+        type?: boolean;
+        newTab?: boolean;
+        reference?: boolean;
+        url?: boolean;
+        label?: boolean;
+        appearance?: boolean;
+      };
+  id?: boolean;
+  blockName?: boolean;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "EmptyBlock_select".
+ */
+export interface EmptyBlockSelect<T extends boolean = true> {
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "GridBlock_select".
+ */
+export interface GridBlockSelect<T extends boolean = true> {
+  items?:
+    | T
+    | {
+        backgroundType?: T;
+        backgroundColor?: T;
+        backgroundImage?: T;
+        description?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "GovernanceBlock_select".
+ */
+export interface GovernanceBlockSelect<T extends boolean = true> {
+  baseBlockFields?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        themeColor?: T;
+        hasLink?: T;
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+              appearance?: T;
+            };
+      };
+  governance?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PatentSectionBlock_select".
+ */
+export interface PatentSectionBlockSelect<T extends boolean = true> {
+  baseBlockFields?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        themeColor?: T;
+        hasLink?: T;
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+              appearance?: T;
+            };
+      };
+  patents?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LogoSectionBlock_select".
+ */
+export interface LogoSectionBlockSelect<T extends boolean = true> {
+  baseBlockFields?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        themeColor?: T;
+        hasLink?: T;
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+              appearance?: T;
+            };
+      };
+  logos?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "WorldMapSectionBlock_select".
+ */
+export interface WorldMapSectionBlockSelect<T extends boolean = true> {
+  baseBlockFields?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        themeColor?: T;
+        hasLink?: T;
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+              appearance?: T;
+            };
+      };
+  worldMap?: T;
   id?: T;
   blockName?: T;
 }
@@ -1813,6 +2796,85 @@ export interface HeadersSelect<T extends boolean = true> {
               label?: T;
               appearance?: T;
             };
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "governance_select".
+ */
+export interface GovernanceSelect<T extends boolean = true> {
+  name?: T;
+  externalTabs?:
+    | T
+    | {
+        label?: T;
+        subTab?:
+          | T
+          | {
+              subTabLabel?: T;
+              column1?: T;
+              column2?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "worldmap_select".
+ */
+export interface WorldmapSelect<T extends boolean = true> {
+  name?: T;
+  coordinates?:
+    | T
+    | {
+        country?: T;
+        latitude?: T;
+        longitude?: T;
+        id?: T;
+      };
+  columns?:
+    | T
+    | {
+        description?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "patented_select".
+ */
+export interface PatentedSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  flags?: T;
+  file?: T;
+  granted?: T;
+  techonlogies?: T;
+  appDomain?: T;
+  applicationYear?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "logos_select".
+ */
+export interface LogosSelect<T extends boolean = true> {
+  name?: T;
+  columns?: T;
+  rows?: T;
+  logos?:
+    | T
+    | {
+        logo?: T;
         id?: T;
       };
   updatedAt?: T;

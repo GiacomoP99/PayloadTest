@@ -5,16 +5,26 @@ import type React from 'react';
 import { Fragment } from 'react';
 import BaseBlock from './BaseBlock';
 import { CarouselSectionBlock } from './CarouselSection/Component';
-import { ContentBlock } from './Content/Component';
+import ComposableBlock from './ComposableBlock/Component';
 import { FullCardBlock } from './FullCardBlock/Component';
+import { GovernanceBlock } from './GovernanceBlock/Component';
+import { LogoSectionBlock } from './LogoSection/Component';
 import NoContentBlock from './NoContentBlock/Component';
+import { PatentSectionBlock } from './PatentSection/Component';
+import { TabsBlock } from './TabsBlock/Component';
+import { WorldMapSectionBlock } from './WorldMap/Component';
 
 const blockComponents = {
   formBlock: FormBlock,
-  content: ContentBlock,
   defBlock: NoContentBlock,
   caro: CarouselSectionBlock,
-  fullcard: FullCardBlock
+  fullcard: FullCardBlock,
+  comp: ComposableBlock,
+  tb: TabsBlock,
+  gb: GovernanceBlock,
+  ps: PatentSectionBlock,
+  wms: WorldMapSectionBlock,
+  lsb: LogoSectionBlock
 };
 
 export const RenderBlocks: React.FC<{

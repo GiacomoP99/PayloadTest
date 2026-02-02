@@ -1,51 +1,32 @@
-import type { Block } from 'payload'
-
-import {
-  FixedToolbarFeature,
-  HeadingFeature,
-  InlineToolbarFeature,
-  lexicalEditor,
-} from '@payloadcms/richtext-lexical'
+import { baseBlockFields } from '@/fields/baseBlockFields';
+import { richtextField } from '@/fields/richTextField';
+import type { Block } from 'payload';
 
 export const FormBlock: Block = {
   slug: 'formBlock',
   interfaceName: 'FormBlock',
+  imageURL: '/form.png',
+  labels: {
+    singular: { it: 'Form', en: 'Form' },
+    plural: { it: 'Form', en: 'Form' }
+  },
+  ...baseBlockFields,
   fields: [
+    {
+      name: 'title',
+      label: { it: 'Titolo', en: 'Title' },
+      type: 'text',
+      localized: true
+    },
+    richtextField('description', { en: 'Description', it: 'Descrizione' }),
     {
       name: 'form',
       type: 'relationship',
       relationTo: 'forms',
-      required: true,
-    },
-    {
-      name: 'enableIntro',
-      type: 'checkbox',
-      label: 'Enable Intro Content',
-    },
-    {
-      name: 'introContent',
-      type: 'richText',
-      admin: {
-        condition: (_, { enableIntro }) => Boolean(enableIntro),
-      },
-      editor: lexicalEditor({
-        features: ({ rootFeatures }) => {
-          return [
-            ...rootFeatures,
-            HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
-            FixedToolbarFeature(),
-            InlineToolbarFeature(),
-          ]
-        },
-      }),
-      label: 'Intro Content',
-    },
+      required: true
+    }
   ],
   graphQL: {
-    singularName: 'FormBlock',
-  },
-  labels: {
-    plural: 'Form Blocks',
-    singular: 'Form Block',
-  },
-}
+    singularName: 'FormBlock'
+  }
+};

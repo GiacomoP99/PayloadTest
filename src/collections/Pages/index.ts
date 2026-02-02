@@ -1,7 +1,13 @@
 import { CarouselSection } from '@/blocks/CarouselSection/config';
+import { ComposableBlock } from '@/blocks/ComposableBlock/config';
 import { Content } from '@/blocks/Content/config';
 import { FullCard } from '@/blocks/FullCardBlock/config';
+import { GovernanceBlock } from '@/blocks/GovernanceBlock/config';
+import { LogoSection } from '@/blocks/LogoSection/config';
 import { NoContentBlock } from '@/blocks/NoContentBlock/config';
+import { PatentSection } from '@/blocks/PatentSection/config';
+import { TabsBlock } from '@/blocks/TabsBlock/config';
+import { WorldMapSection } from '@/blocks/WorldMap/config';
 import { tenantField } from '@/fields/tenantField';
 import { hero } from '@/heros/config';
 import {
@@ -94,13 +100,13 @@ export const Pages: CollectionConfig<'pages'> = {
                 Content,
                 NoContentBlock,
                 FullCard,
-                CarouselSection
-                // TabsBlock,
-                // GovernanceBlock,
-                // PatentSection,
-                // ComposableBlock,
-                // LogoSection,
-                // WorldMapSection
+                CarouselSection,
+                TabsBlock,
+                GovernanceBlock,
+                PatentSection,
+                ComposableBlock,
+                LogoSection,
+                WorldMapSection
               ],
               required: true,
               admin: {

@@ -1,0 +1,29 @@
+.coordinate-field-component {
+  margin: 0.5rem 0;
+
+  .coordinate-input-wrapper {
+    display: flex;
+    align-items: center;
+  }
+
+  .coordinate-input-item {
+    display: flex;
+    margin-right: 0.25rem;
+  }
+
+  .coordinate-input-value {
+    width: 5rem;
+  }
+
+  .coordinate-input-value-lg {
+    width: 6rem;
+  }
+
+  .coordinate-input-unit {
+    margin-left: 0.5rem;
+  }
+
+  .field-description {
+    margin-bottom: 1rem;
+  }
+}

@@ -7,10 +7,14 @@ import { buildConfig, type PayloadRequest } from 'payload';
 import sharp from 'sharp';
 import { fileURLToPath } from 'url';
 import { Categories } from './collections/Categories';
+import { Governance } from './collections/Governance';
+import { Logos } from './collections/Logos';
 import { Media } from './collections/Media';
 import { Pages } from './collections/Pages';
+import { Patented } from './collections/Patented';
 import { Posts } from './collections/Posts';
 import { Users } from './collections/Users';
+import { WorldMap } from './collections/WorldMap';
 import { Footer } from './Footer/config';
 import { Headers } from './Header/config';
 import { plugins } from './plugins';
@@ -61,7 +65,18 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URL || ''
   }),
-  collections: [Pages, Posts, Media, Categories, Users, Headers],
+  collections: [
+    Pages,
+    Posts,
+    Media,
+    Categories,
+    Users,
+    Headers,
+    Governance,
+    WorldMap,
+    Patented,
+    Logos
+  ],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Footer],
   plugins,
